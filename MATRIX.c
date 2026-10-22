@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include "OPMATRIX.h"
+#include "IOMATRIX.h"
 
 void descargar_matriz(matrix matriz_solucion);
 void mostrar_matriz(matrix matriz);
@@ -86,9 +87,7 @@ void cargar_matriz(matrix matriz) {
             }
             define_matrix(vector, matriz);
             printf("Matriz creada correctamente.\n");
-            printf("Presione cualquier tecla para continuar...\n");
-            getchar(); // Captura el salto de línea pendiente
-            getchar(); // Espera a que el usuario presione una tecla
+            visualizarMatriz(matriz);
             break;
         case 2:
             // Lógica para cargar desde un archivo         <-- FALTA CODIGO
@@ -105,13 +104,7 @@ void cargar_matriz(matrix matriz) {
 }
 
 void mostrar_matriz(matrix matriz) {
-    printf("Matriz:\n");
-    for (int i = 0; i < 5; i++) {
-        for (int j = 0; j < 5; j++) {
-            printf("%d ", matriz[i][j]);
-        }
-        printf("\n");
-    }
+    visualizarMatriz(matriz);
     printf("\n");
     printf("Presione cualquier tecla para continuar...\n");
     getchar(); // Captura el salto de línea pendiente
@@ -122,9 +115,7 @@ void descargar_matriz(matrix matriz_solucion) {
     // Lógica para descargar la matriz solución
     printf("Descargando matriz solución...\n");
     // Aquí se implementaría la lógica para mostrar o guardar la matriz solución
-    printf("Presione cualquier tecla para continuar...\n");
-    getchar(); // Captura el salto de línea pendiente
-    getchar(); // Espera a que el usuario presione una tecla
+    mostrar_matriz(matriz_solucion);
 }
 
 void selector_operaciones(matrix matriz1, matrix matriz2, matrix matriz_solucion) {
@@ -145,17 +136,13 @@ void selector_operaciones(matrix matriz1, matrix matriz2, matrix matriz_solucion
         case 1:
             sum(matriz1, matriz2, matriz_solucion);
             printf("Matrices sumadas correctamente.\n");
-            printf("Presione cualquier tecla para continuar...\n");
-            getchar(); // Captura el salto de línea pendiente
-            getchar(); // Espera a que el usuario presione una tecla
+            mostrar_matriz(matriz_solucion);
             break;
 
         case 2:
             subtract(matriz1, matriz2, matriz_solucion);
             printf("Matrices restadas correctamente.\n");
-            printf("Presione cualquier tecla para continuar...\n");
-            getchar(); // Captura el salto de línea pendiente
-            getchar(); // Espera a que el usuario presione una tecla
+            mostrar_matriz(matriz_solucion);
             break;
 
         case 3:
@@ -163,9 +150,7 @@ void selector_operaciones(matrix matriz1, matrix matriz2, matrix matriz_solucion
             scanf("%d", &scalar);
             esc_product(matriz1, scalar, matriz_solucion);
             printf("Producto escalar de matriz 1 realizado correctamente.\n");
-            printf("Presione cualquier tecla para continuar...\n");
-            getchar(); // Captura el salto de línea pendiente
-            getchar(); // Espera a que el usuario presione una tecla
+            mostrar_matriz(matriz_solucion);
             break;
 
         case 4:
@@ -173,16 +158,13 @@ void selector_operaciones(matrix matriz1, matrix matriz2, matrix matriz_solucion
             scanf("%d", &scalar);
             esc_product(matriz2, scalar, matriz_solucion);
             printf("Producto escalar de matriz 2 realizado correctamente.\n");
-            printf("Presione cualquier tecla para continuar...\n");
-            getchar(); // Captura el salto de línea pendiente
-            getchar(); // Espera a que el usuario presione una tecla
+            mostrar_matriz(matriz_solucion);
             break;
 
         case 5:
-            printf("Producto de matrices no implementado aún.\n");
-            printf("Presione cualquier tecla para continuar...\n");
-            getchar(); // Captura el salto de línea pendiente
-            getchar(); // Espera a que el usuario presione una tecla
+            product(matriz1, matriz2, matriz_solucion);
+            printf("Producto de matrices realizado correctamente.\n");
+            mostrar_matriz(matriz_solucion);
             break;  
 
         default:
