@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include "OPMATRIX.h"
-
+#include "IOMATRIX.h"
 
 int main() {
     // 1. Definimos dos matrices A y B con valores sencillos para comprobar el cálculo a simple vista
@@ -21,22 +21,21 @@ int main() {
     };
 
     matrix R; // Matriz donde se guardará el resultado de cada cálculo
-
     // 2. Probar SUMA (A + B) -> Todas las posiciones deben dar 6
     sum(A, B, R);
-    imprimir_matriz("R = A + B)", R);
-
     // 3. Probar RESTA (A - B)
     subtract(A, B, R);
-    imprimir_matriz("R = A - B", R);
-
     // 4. Probar PRODUCTO ESCALAR (3 * A)
-    esc_product(3, A, R);
-    imprimir_matriz("R = n x A", R);
+    esc_product(A, 3, R);
 
     // 5. Probar MULTIPLICACION MATRICIAL (A x B)
     product(A, B, R);
-    imprimir_matriz("R = A x B (Multiplicacion)", R);
+    
+    // 6. Probar Matriz simétrica
+    if (simetric(A))
+	    printf("A es simetrica");
+    else
+	    printf("A no es simetrica");
 
     printf("\nPrueba completada.\n");
     return 0;
