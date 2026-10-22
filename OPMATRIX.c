@@ -28,3 +28,16 @@ void esc_product(matrix A, int b,matrix C)
 			C[i][j] = A[i][j] * b;
 }
 
+void product(matrix A,matrix B,matrix C)
+{
+	for (int i=0;i<5;i++)
+		for (int j=0;j<5;j++)
+		{
+			C[i][j] = 0;
+			for (int a=0;a<5;a++)
+			{
+				C[i][j] += A[i][a] * B[a][j];
+			}
+		}
+}
+
