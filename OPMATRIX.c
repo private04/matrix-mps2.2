@@ -7,3 +7,10 @@ void define_matrix(int *V,matrix A)
 		A[i/5][i%5] = V[i];
 	}
 }
+
+void sum(matrix A,matrix B,matrix C)
+{
+	for (int i=0;i<5;i++)
+		for (int j=0;j<5;i++)
+			C[i][j] = A[i][j] + B[i][j];
+}
