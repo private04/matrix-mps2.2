@@ -3,6 +3,13 @@
 
 #define MATRIX_SIZE 5
 
-void visualizarMatriz(const int matriz[MATRIX_SIZE][MATRIX_SIZE]);
+void visualizarMatriz(
+    const int matriz[MATRIX_SIZE][MATRIX_SIZE]
+);
+
+int guardarMatriz(
+    const char *nombreArchivo,
+    const int matriz[MATRIX_SIZE][MATRIX_SIZE]
+);
 
 #endif
