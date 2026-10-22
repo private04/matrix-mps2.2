@@ -1,4 +1,8 @@
 #include <stdio.h>
+#include <errno.h>
+#include <limits.h>
+#include <stdlib.h>
+#include <string.h>
 #include "OPMATRIX.h"
 #include "IOMATRIX.h"
 
@@ -11,17 +15,111 @@ void selector_operaciones(matrix matriz1, matrix matriz2, matrix matriz_solucion
 static void registrar_evento(const char *evento);
 static void registrar_matriz(const char *descripcion, matrix matriz);
 
-static void limpiar_buffer(void) {
+static int leer_entero(const char *mensaje, int *valor) {
+    char linea[128];
+    char *fin;
+    long resultado;
+
+    fputs(mensaje, stdout);
+    if (ferror(stdout)) {
+        fprintf(stderr, "Error al mostrar el mensaje de entrada.\n");
+        return -1;
+    }
+
+    if (fgets(linea, sizeof(linea), stdin) == NULL) {
+        if (ferror(stdin)) {
+            perror("Error al leer la entrada");
+        } else {
+            fprintf(stderr, "Fin de la entrada.\n");
+        }
+        return -1;
+    }
+
+    if (strchr(linea, '\n') == NULL) {
+        int caracter;
+        while ((caracter = getchar()) != '\n' && caracter != EOF) {
+        }
+        if (caracter == EOF && ferror(stdin)) {
+            perror("Error al limpiar la entrada");
+            return -1;
+        }
+        fprintf(stderr, "La entrada es demasiado larga.\n");
+        return 0;
+    }
+
+    errno = 0;
+    resultado = strtol(linea, &fin, 10);
+    if (fin == linea || errno == ERANGE ||
+        resultado < INT_MIN || resultado > INT_MAX) {
+        fprintf(stderr, "Entrada no válida. Introduzca un número entero.\n");
+        return 0;
+    }
+
+    while (*fin == ' ' || *fin == '\t' || *fin == '\r' || *fin == '\n') {
+        fin++;
+    }
+    if (*fin != '\0') {
+        fprintf(stderr, "Entrada no válida. Introduzca solo un número entero.\n");
+        return 0;
+    }
+
+    *valor = (int) resultado;
+    return 1;
+}
+
+static int esperar_enter(void) {
+    char linea[128];
     int caracter;
 
-    while ((caracter = getchar()) != '\n' && caracter != EOF) {
+    fputs("Presione Enter para continuar...\n", stdout);
+    if (ferror(stdout)) {
+        fprintf(stderr, "Error al mostrar el mensaje de continuación.\n");
+        return 0;
     }
+    if (fgets(linea, sizeof(linea), stdin) == NULL) {
+        if (ferror(stdin)) {
+            perror("Error al leer la entrada");
+        }
+        return 0;
+    }
+    if (strchr(linea, '\n') == NULL) {
+        while ((caracter = getchar()) != '\n' && caracter != EOF) {
+        }
+        if (caracter == EOF && ferror(stdin)) {
+            perror("Error al limpiar la entrada");
+            return 0;
+        }
+    }
+    return 1;
+}
+
+static void registrar_numero(const char *descripcion, int valor) {
+    char mensaje[128];
+
+    snprintf(mensaje, sizeof(mensaje), "%s %d.", descripcion, valor);
+    registrar_evento(mensaje);
+}
+
+static int cerrar_log(void) {
+    int resultado;
+
+    if (log_file == NULL) {
+        return 1;
+    }
+    resultado = fclose(log_file);
+    log_file = NULL;
+    if (resultado != 0) {
+        perror("Error al cerrar log.txt");
+        return 0;
+    }
+    return 1;
 }
 
 
 int main() {
     int option = 0;
-    matrix matriz1, matriz2, matriz_solucion;
+    int lectura;
+    matrix matriz1 = {0}, matriz2 = {0}, matriz_solucion = {0};
 
     log_file = fopen("log.txt", "w");
     if (log_file == NULL) {
@@ -41,10 +139,16 @@ int main() {
         printf("4. Descargar matriz solucion\n");
         printf("5. Selector de operaciones\n");
         printf("6. Salir\n");
-        printf("Opcion: ");
-        scanf("%d", &option);
-        fprintf(log_file, "Opcion seleccionada: %d\n", option);
-        fflush(log_file);
+        lectura = leer_entero("Opcion: ", &option);
+        if (lectura < 0) {
+            registrar_evento("Entrada finalizada o error de lectura. Cerrando el programa.");
+            break;
+        }
+        if (lectura == 0) {
+            registrar_evento("Entrada no valida en el menu principal.");
+            continue;
+        }
+        registrar_numero("Opcion seleccionada:", option);
 
         switch (option) {
             case 1:
@@ -88,9 +192,7 @@ int main() {
         }
     } while (option != 6);
 
-    fclose(log_file);
-    log_file = NULL;
-    return 0;
+    return cerrar_log() ? 0 : 1;
 }
 
 void cargar_matriz(matrix matriz) {
@@ -101,36 +203,38 @@ void cargar_matriz(matrix matriz) {
     printf("Seleccione un metodo para cargar la matriz:\n");
     printf("1. Ingresar valores manualmente\n");
     printf("2. Cargar desde un archivo\n");
-    printf("Opcion: ");
-    scanf("%d", &option);
+    if (leer_entero("Opcion: ", &option) <= 0) {
+        registrar_evento("Entrada invalida o finalizada al seleccionar el metodo de carga.");
+        return;
+    }
     switch (option) {
         case 1:
             printf("Ingrese los valores de la matriz 5x5:\n");
             for (int i = 0; i < 25; i++) {
-                printf("Valor en la posicion [%d][%d]: ", i / MATRIX_COLUMNS + 1, i % MATRIX_COLUMNS + 1);
-                scanf("%d", &vector[i]);
+                char mensaje[64];
+                snprintf(mensaje, sizeof(mensaje),
+                         "Valor en la posicion [%d][%d]: ",
+                         i / MATRIX_COLUMNS + 1, i % MATRIX_COLUMNS + 1);
+                if (leer_entero(mensaje, &vector[i]) <= 0) {
+                    registrar_evento("Carga manual cancelada por una entrada invalida o finalizada.");
+                    return;
+                }
             }
-            limpiar_buffer();
             define_matrix(vector, matriz);
             printf("Matriz creada correctamente.\n");
             registrar_evento("Matriz cargada manualmente.");
             registrar_matriz("Valores de la matriz cargada:", matriz);
             visualizarMatriz(matriz);
-            printf("Presione Enter para continuar...\n");
-            getchar();
+            esperar_enter();
             break;
         case 2:
             registrar_evento("Solicitud de carga desde archivo no implementada.");
-            printf("Presione cualquier tecla para continuar...\n");
-            getchar(); // Captura el salto de línea pendiente
-            getchar(); // Espera a que el usuario presione una tecla
+            esperar_enter();
             break;
         default:
             printf("Opcion no válida.\n");
             registrar_evento("Metodo de carga no valido.");
-            printf("Presione cualquier tecla para continuar...\n");
-            getchar(); // Captura el salto de línea pendiente
-            getchar(); // Espera a que el usuario presione una tecla
+            esperar_enter();
     }
 }
 
@@ -138,9 +242,7 @@ void mostrar_matriz(matrix matriz) {
     registrar_matriz("Matriz mostrada:", matriz);
     visualizarMatriz(matriz);
     printf("\n");
-    printf("Presione cualquier tecla para continuar...\n");
-    getchar(); // Captura el salto de línea pendiente
-    getchar(); // Espera a que el usuario presione una tecla
+    esperar_enter();
 }
 
 void descargar_matriz(matrix matriz_solucion) {
@@ -160,10 +262,11 @@ void selector_operaciones(matrix matriz1, matrix matriz2, matrix matriz_solucion
     printf("3. Producto escalar de matriz 1\n");
     printf("4. Producto de matrices\n");
     printf("5. Matriz Simétrica\n");
-    printf("Opcion: ");
-    scanf("%d", &option);
-    fprintf(log_file, "Operacion seleccionada: %d\n", option);
-    fflush(log_file);
+    if (leer_entero("Opcion: ", &option) <= 0) {
+        registrar_evento("Entrada invalida o finalizada al seleccionar la operacion.");
+        return;
+    }
+    registrar_numero("Operacion seleccionada:", option);
 
     switch (option) {
         case 1:
@@ -184,11 +287,13 @@ void selector_operaciones(matrix matriz1, matrix matriz2, matrix matriz_solucion
 
         case 3:
             printf("Ingrese el escalar para multiplicar la matriz 1: ");
-            scanf("%d", &scalar);
+            if (leer_entero("", &scalar) <= 0) {
+                registrar_evento("Producto escalar cancelado por una entrada invalida o finalizada.");
+                return;
+            }
             esc_product(matriz1, scalar, matriz_solucion);
             printf("Producto escalar de matriz 1 realizado correctamente.\n");
-            fprintf(log_file, "Producto escalar de matriz 1 realizado con escalar %d.\n", scalar);
-            fflush(log_file);
+            registrar_numero("Producto escalar de matriz 1 realizado con escalar", scalar);
             registrar_matriz("Resultado del producto escalar de matriz 1:", matriz_solucion);
             mostrar_matriz(matriz_solucion);
             break;
@@ -216,9 +321,7 @@ void selector_operaciones(matrix matriz1, matrix matriz2, matrix matriz_solucion
         default:
             printf("Opción no válida.\n");
             registrar_evento("Operacion no valida.");
-            printf("Presione cualquier tecla para continuar...\n");
-            getchar(); // Captura el salto de línea pendiente
-            getchar(); // Espera a que el usuario presione una tecla
+            esperar_enter();
     }
 }
 
@@ -227,8 +330,11 @@ static void registrar_evento(const char *evento) {
         return;
     }
 
-    fprintf(log_file, "%s\n", evento);
-    fflush(log_file);
+    if (fprintf(log_file, "%s\n", evento) < 0 || fflush(log_file) != 0) {
+        perror("Error al escribir en log.txt");
+        fclose(log_file);
+        log_file = NULL;
+    }
 }
 
 static void registrar_matriz(const char *descripcion, matrix matriz) {
@@ -236,15 +342,39 @@ static void registrar_matriz(const char *descripcion, matrix matriz) {
         return;
     }
 
-    fprintf(log_file, "%s\n", descripcion);
+    if (fprintf(log_file, "%s\n", descripcion) < 0) {
+        perror("Error al escribir en log.txt");
+        fclose(log_file);
+        log_file = NULL;
+        return;
+    }
     for (int i = 0; i < MATRIX_ROWS; i++) {
         for (int j = 0; j < MATRIX_COLUMNS; j++) {
-            fprintf(log_file, "%d", matriz[i][j]);
+            if (fprintf(log_file, "%d", matriz[i][j]) < 0) {
+                perror("Error al escribir en log.txt");
+                fclose(log_file);
+                log_file = NULL;
+                return;
+            }
             if (j < MATRIX_COLUMNS - 1) {
-                fprintf(log_file, " ");
+                if (fputc(' ', log_file) == EOF) {
+                    perror("Error al escribir en log.txt");
+                    fclose(log_file);
+                    log_file = NULL;
+                    return;
+                }
             }
         }
-        fprintf(log_file, "\n");
+        if (fputc('\n', log_file) == EOF) {
+            perror("Error al escribir en log.txt");
+            fclose(log_file);
+            log_file = NULL;
+            return;
+        }
     }
-    fflush(log_file);
+    if (fflush(log_file) != 0) {
+        perror("Error al guardar log.txt");
+        fclose(log_file);
+        log_file = NULL;
+    }
 }
