@@ -20,3 +20,11 @@ void subtract(matrix A,matrix B,matrix C)
 		for (int j=0;j<5;j++)
 			C[i][j] = A[i][j] - B[i][j];
 }
+
+void esc_product(matrix A, int b,matrix C)
+{
+	for (int i=0;i<5;i++)
+		for (int j=0;j<5;j++)
+			C[i][j] = A[i][j] * b;
+}
+
