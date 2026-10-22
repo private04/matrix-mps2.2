@@ -26,4 +26,8 @@ void esc_product(matrix A,int b,matrix C);
 //Post: C becomes a matrix that is the product of A and B
 void product(matrix A,matrix B,matrix C);
 
+//Pre: A and B are defined
+//Post: returns whether or not A is simetric.
+bool simetric(matrix A);
+
 #endif

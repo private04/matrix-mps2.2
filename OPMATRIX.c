@@ -41,3 +41,13 @@ void product(matrix A,matrix B,matrix C)
 		}
 }
 
+bool simetric(matrix A)
+{
+	bool simetric;
+	for (int i=0;i<5 && simetric;i++)
+		for (int j=0;j<5 && simetric;j++)
+		{
+			if (A[i][j] != A[j][i]) simetric = false;
+		}
+	return simetric;
+}
