@@ -11,6 +11,13 @@ void selector_operaciones(matrix matriz1, matrix matriz2, matrix matriz_solucion
 static void registrar_evento(const char *evento);
 static void registrar_matriz(const char *descripcion, matrix matriz);
 
+static void limpiar_buffer(void) {
+    int caracter;
+
+    while ((caracter = getchar()) != '\n' && caracter != EOF) {
+    }
+}
+
 
 int main() {
     int option = 0;
@@ -94,20 +101,23 @@ void cargar_matriz(matrix matriz) {
     printf("Seleccione un metodo para cargar la matriz:\n");
     printf("1. Ingresar valores manualmente\n");
     printf("2. Cargar desde un archivo\n");
-    printf("Opción: ");
+    printf("Opcion: ");
     scanf("%d", &option);
     switch (option) {
         case 1:
             printf("Ingrese los valores de la matriz 5x5:\n");
             for (int i = 0; i < 25; i++) {
-                printf("Valor %d: ", i + 1);
+                printf("Valor en la posicion [%d][%d]: ", i / MATRIX_COLUMNS + 1, i % MATRIX_COLUMNS + 1);
                 scanf("%d", &vector[i]);
             }
+            limpiar_buffer();
             define_matrix(vector, matriz);
             printf("Matriz creada correctamente.\n");
             registrar_evento("Matriz cargada manualmente.");
             registrar_matriz("Valores de la matriz cargada:", matriz);
             visualizarMatriz(matriz);
+            printf("Presione Enter para continuar...\n");
+            getchar();
             break;
         case 2:
             registrar_evento("Solicitud de carga desde archivo no implementada.");
