@@ -86,12 +86,21 @@ void cargar_matriz(matrix matriz) {
             }
             define_matrix(vector, matriz);
             printf("Matriz creada correctamente.\n");
+            printf("Presione cualquier tecla para continuar...\n");
+            getchar(); // Captura el salto de línea pendiente
+            getchar(); // Espera a que el usuario presione una tecla
             break;
         case 2:
-            // Lógica para cargar desde un archivo
+            // Lógica para cargar desde un archivo         <-- FALTA CODIGO
+            printf("Presione cualquier tecla para continuar...\n");
+            getchar(); // Captura el salto de línea pendiente
+            getchar(); // Espera a que el usuario presione una tecla
             break;
         default:
             printf("Opcion no válida.\n");
+            printf("Presione cualquier tecla para continuar...\n");
+            getchar(); // Captura el salto de línea pendiente
+            getchar(); // Espera a que el usuario presione una tecla
     }
 }
 
@@ -113,14 +122,22 @@ void descargar_matriz(matrix matriz_solucion) {
     // Lógica para descargar la matriz solución
     printf("Descargando matriz solución...\n");
     // Aquí se implementaría la lógica para mostrar o guardar la matriz solución
+    printf("Presione cualquier tecla para continuar...\n");
+    getchar(); // Captura el salto de línea pendiente
+    getchar(); // Espera a que el usuario presione una tecla
 }
 
 void selector_operaciones(matrix matriz1, matrix matriz2, matrix matriz_solucion) {
     // Lógica para seleccionar operaciones entre las matrices
+    int scalar;
+    
     int option = 0;
     printf("Seleccione la operación que desea realizar:\n");
     printf("1. Sumar matrices\n");
     printf("2. Restar matrices\n");
+    printf("3. Producto escalar de matriz 1\n");
+    printf("4. Producto escalar de matriz 2\n");
+    printf("5. Producto de matrices\n");
     printf("Opcion: ");
     scanf("%d", &option);
 
@@ -128,12 +145,50 @@ void selector_operaciones(matrix matriz1, matrix matriz2, matrix matriz_solucion
         case 1:
             sum(matriz1, matriz2, matriz_solucion);
             printf("Matrices sumadas correctamente.\n");
+            printf("Presione cualquier tecla para continuar...\n");
+            getchar(); // Captura el salto de línea pendiente
+            getchar(); // Espera a que el usuario presione una tecla
             break;
+
         case 2:
             subtract(matriz1, matriz2, matriz_solucion);
             printf("Matrices restadas correctamente.\n");
+            printf("Presione cualquier tecla para continuar...\n");
+            getchar(); // Captura el salto de línea pendiente
+            getchar(); // Espera a que el usuario presione una tecla
             break;
+
+        case 3:
+            printf("Ingrese el escalar para multiplicar la matriz 1: ");
+            scanf("%d", &scalar);
+            esc_product(matriz1, scalar, matriz_solucion);
+            printf("Producto escalar de matriz 1 realizado correctamente.\n");
+            printf("Presione cualquier tecla para continuar...\n");
+            getchar(); // Captura el salto de línea pendiente
+            getchar(); // Espera a que el usuario presione una tecla
+            break;
+
+        case 4:
+            printf("Ingrese el escalar para multiplicar la matriz 2: ");
+            scanf("%d", &scalar);
+            esc_product(matriz2, scalar, matriz_solucion);
+            printf("Producto escalar de matriz 2 realizado correctamente.\n");
+            printf("Presione cualquier tecla para continuar...\n");
+            getchar(); // Captura el salto de línea pendiente
+            getchar(); // Espera a que el usuario presione una tecla
+            break;
+
+        case 5:
+            printf("Producto de matrices no implementado aún.\n");
+            printf("Presione cualquier tecla para continuar...\n");
+            getchar(); // Captura el salto de línea pendiente
+            getchar(); // Espera a que el usuario presione una tecla
+            break;  
+
         default:
             printf("Opción no válida.\n");
+            printf("Presione cualquier tecla para continuar...\n");
+            getchar(); // Captura el salto de línea pendiente
+            getchar(); // Espera a que el usuario presione una tecla
     }
 }
