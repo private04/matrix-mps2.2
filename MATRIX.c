@@ -67,23 +67,26 @@ void descargar_matriz(matrix matriz_solucion) {
 
 void cargar_matriz(matrix matriz) {
     int option = 0;
+    int vector[25]; // Vector para almacenar los valores de la matriz
 
     // Lógica para cargar una matriz
     printf("Seleccione un método para cargar la matriz:\n");
     printf("1. Ingresar valores manualmente\n");
     printf("2. Cargar desde un archivo\n");
-    printf("3. Generar una matriz aleatoria\n");
     printf("Opción: ");
     scanf("%d", &option);
     switch (option) {
         case 1:
-            // Lógica para ingresar valores manualmente
+            printf("Ingrese los valores de la matriz 5x5:\n");
+            for (int i = 0; i < 25; i++) {
+                printf("Valor %d: ", i + 1);
+                scanf("%d", &vector[i]);
+            }
+            define_matrix(vector, matriz);
+            printf("Matriz creada correctamente.\n");
             break;
         case 2:
             // Lógica para cargar desde un archivo
-            break;
-        case 3:
-            // Lógica para generar una matriz aleatoria
             break;
         default:
             printf("Opción no válida.\n");
@@ -92,4 +95,23 @@ void cargar_matriz(matrix matriz) {
 
 void selector_operaciones(matrix matriz1, matrix matriz2, matrix matriz_solucion) {
     // Lógica para seleccionar operaciones entre las matrices
+    int option = 0;
+    printf("Seleccione la operación que desea realizar:\n");
+    printf("1. Sumar matrices\n");
+    printf("2. Restar matrices\n");
+    printf("Opción: ");
+    scanf("%d", &option);
+
+    switch (option) {
+        case 1:
+            sum(matriz1, matriz2, matriz_solucion);
+            printf("Matrices sumadas correctamente.\n");
+            break;
+        case 2:
+            subtract(matriz1, matriz2, matriz_solucion);
+            printf("Matrices restadas correctamente.\n");
+            break;
+        default:
+            printf("Opción no válida.\n");
+    }
 }
