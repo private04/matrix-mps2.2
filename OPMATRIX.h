@@ -1,6 +1,8 @@
 #ifndef OPMATRIX_H
 #define OPMATRIX_H
 
+#include <stdbool.h>
+
 #define MATRIX_ROWS 5
 #define MATRIX_COLUMNS 5
 

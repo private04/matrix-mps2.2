@@ -1,0 +1,32 @@
+Inicio de la calculadora de matrices.
+Opcion seleccionada: 1
+Solicitud de carga de matriz 1.
+Matriz cargada manualmente.
+Valores de la matriz cargada:
+1 1 1 1 1
+1 1 1 1 1
+1 1 1 1 1
+1 1 1 1 1
+1 1 1 1 1
+Opcion seleccionada: 2
+Solicitud de carga de matriz 2.
+Solicitud de carga desde archivo no implementada.
+Opcion seleccionada: 2
+Solicitud de carga de matriz 2.
+Matriz cargada manualmente.
+Valores de la matriz cargada:
+2 2 2 2 2
+2 2 2 2 2
+2 2 2 2 2
+2 2 2 2 2
+2 2 2 2 2
+Opcion seleccionada: 3
+Solicitud de visualizacion de la matriz solucion.
+Matriz mostrada:
+0 0 0 0 0
+0 0 0 0 0
+0 0 0 0 0
+0 0 0 0 0
+0 0 0 0 0
+Opcion seleccionada: 6
+Fin de la calculadora de matrices.
