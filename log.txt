@@ -1,0 +1,12 @@
+Inicio de la calculadora de matrices.
+Opcion seleccionada: 1
+Solicitud de carga de matriz 1.
+Matriz cargada manualmente.
+Valores de la matriz cargada:
+1 1 1 1 1
+2 2 2 2 2
+3 3 3 3 3
+4 4 4 4 4
+5 5 5 5 5
+Opcion seleccionada: 6
+Fin de la calculadora de matrices.

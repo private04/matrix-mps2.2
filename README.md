@@ -16,3 +16,10 @@ Equipo:
 - Documentación: Jaime
 - Testing: Jaime
 - Desarrollo: Kevin, Pablo, Moncef
+
+Actualizaciones:
+- Operaciones terminadas
+- Documentación avanzada
+- Main avanzado
+- Visualizar matriz terminado
+- Falta testing de las funciones terminadas

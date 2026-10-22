@@ -1,7 +1,7 @@
 
 #include <stdio.h>
 #include <stddef.h>
-#include "IOMATRIX.h"
+#include "OPMATRIX.h"
 
 /*
  * Step 1: Display the matrix on screen
