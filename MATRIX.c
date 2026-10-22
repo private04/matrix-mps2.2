@@ -2,6 +2,7 @@
 #include "OPMATRIX.h"
 
 void descargar_matriz(matrix matriz_solucion);
+void mostrar_matriz(matrix matriz);
 void cargar_matriz(matrix matriz);
 void selector_operaciones(matrix matriz1, matrix matriz2, matrix matriz_solucion);
 
@@ -16,9 +17,10 @@ int main() {
         printf("Por favor, introduce la opcion que deseas realizar:\n");
         printf("1. Cargar matriz 1\n");
         printf("2. Cargar matriz 2\n");
-        printf("3. Descargar matriz solucion\n");
-        printf("4. Selector de operaciones\n");
-        printf("5. Salir\n");
+        printf("3. Mostrar matriz solucion\n");
+        printf("4. Descargar matriz solucion\n");
+        printf("5. Selector de operaciones\n");
+        printf("6. Salir\n");
         printf("Opcion: ");
         scanf("%d", &option);
 
@@ -37,32 +39,32 @@ int main() {
                 break;
             case 3:
                 printf("\033[H\033[J");
+                printf("Has seleccionado mostrar matriz solución.\n");
+                // Lógica para mostrar matriz solución
+                mostrar_matriz(matriz_solucion);
+                break;
+            case 4:
+                printf("\033[H\033[J");
                 printf("Has seleccionado descargar matriz solución.\n");
                 // Lógica para descargar matriz solución
                 descargar_matriz(matriz_solucion);
                 break;
-            case 4:
+            case 5:
                 printf("\033[H\033[J");
                 printf("Has seleccionado el selector de operaciones.\n");
                 // Lógica para seleccionar operaciones
                 selector_operaciones(matriz1 , matriz2 , matriz_solucion);
                 break;
-            case 5:
+            case 6:
                 printf("\033[H\033[J");
                 printf("Saliendo del programa...\n");
                 break;
             default:
-                printf("Opción no válida. Por favor, selecciona una opción del 1 al 5.\n");
+                printf("Opción no válida. Por favor, selecciona una opción del 1 al 6.\n");
         }
-    } while (option != 5);
+    } while (option != 6);
 
     return 0;
-}
-
-void descargar_matriz(matrix matriz_solucion) {
-    // Lógica para descargar la matriz solución
-    printf("Descargando matriz solución...\n");
-    // Aquí se implementaría la lógica para mostrar o guardar la matriz solución
 }
 
 void cargar_matriz(matrix matriz) {
@@ -70,7 +72,7 @@ void cargar_matriz(matrix matriz) {
     int vector[25]; // Vector para almacenar los valores de la matriz
 
     // Lógica para cargar una matriz
-    printf("Seleccione un método para cargar la matriz:\n");
+    printf("Seleccione un metodo para cargar la matriz:\n");
     printf("1. Ingresar valores manualmente\n");
     printf("2. Cargar desde un archivo\n");
     printf("Opción: ");
@@ -89,8 +91,28 @@ void cargar_matriz(matrix matriz) {
             // Lógica para cargar desde un archivo
             break;
         default:
-            printf("Opción no válida.\n");
+            printf("Opcion no válida.\n");
     }
+}
+
+void mostrar_matriz(matrix matriz) {
+    printf("Matriz:\n");
+    for (int i = 0; i < 5; i++) {
+        for (int j = 0; j < 5; j++) {
+            printf("%d ", matriz[i][j]);
+        }
+        printf("\n");
+    }
+    printf("\n");
+    printf("Presione cualquier tecla para continuar...\n");
+    getchar(); // Captura el salto de línea pendiente
+    getchar(); // Espera a que el usuario presione una tecla
+}
+
+void descargar_matriz(matrix matriz_solucion) {
+    // Lógica para descargar la matriz solución
+    printf("Descargando matriz solución...\n");
+    // Aquí se implementaría la lógica para mostrar o guardar la matriz solución
 }
 
 void selector_operaciones(matrix matriz1, matrix matriz2, matrix matriz_solucion) {
@@ -99,7 +121,7 @@ void selector_operaciones(matrix matriz1, matrix matriz2, matrix matriz_solucion
     printf("Seleccione la operación que desea realizar:\n");
     printf("1. Sumar matrices\n");
     printf("2. Restar matrices\n");
-    printf("Opción: ");
+    printf("Opcion: ");
     scanf("%d", &option);
 
     switch (option) {
