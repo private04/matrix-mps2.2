@@ -22,4 +22,8 @@ void subtract(matrix A,matrix B,matrix C);
 //Post: C becomes a matrix that is the product of A and b
 void esc_product(matrix A,int b,matrix C);
 
+//Pre: A and B are defined
+//Post: C becomes a matrix that is the product of A and B
+void product(matrix A,matrix B,matrix C);
+
 #endif
