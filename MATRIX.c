@@ -100,6 +100,7 @@ int main() {
 
 void descargar_matriz(matrix matriz_solucion) {
     printf("Descargando matriz solución...\n");
+    guardarMatriz("matriz_solucion.txt", matriz_solucion);
     registrar_matriz("Matriz solucion descargada:", matriz_solucion);
     mostrar_matriz(matriz_solucion);
 }
@@ -144,7 +145,15 @@ void cargar_matriz(matrix matriz) {
             esperar_enter();
             break;
         case 2:
-            registrar_evento("Solicitud de carga desde archivo no implementada.");
+            if (cargarMatriz("matriz_cargada.txt", matriz)) {
+                printf("Matriz cargada desde archivo correctamente.\n");
+                registrar_evento("Matriz cargada desde archivo.");
+                registrar_matriz("Valores de la matriz cargada desde archivo:", matriz);
+                visualizarMatriz(matriz);
+            } else {
+                printf("Error al cargar la matriz desde el archivo.\n");
+                registrar_evento("Error al cargar la matriz desde el archivo.");
+            }
             esperar_enter();
             break;
         default:
