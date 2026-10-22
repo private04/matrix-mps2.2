@@ -11,7 +11,7 @@ int main() {
     
     printf("Bienvenido a la calculadora de matrices!\n");
     printf("Esta calculadora puede realizar operaciones con matrices 5x5.\n");
-    //do {
+    do {
         printf("\033[H\033[J"); // Limpiar la pantalla
         printf("Por favor, introduce la opcion que deseas realizar:\n");
         printf("1. Cargar matriz 1\n");
@@ -54,7 +54,7 @@ int main() {
             default:
                 printf("Opción no válida. Por favor, selecciona una opción del 1 al 5.\n");
         }
-    //} while (option != 5);
+    } while (option != 5);
 
     return 0;
 }
@@ -66,7 +66,28 @@ void descargar_matriz(matrix matriz_solucion) {
 }
 
 void cargar_matriz(matrix matriz) {
+    int option = 0;
+
     // Lógica para cargar una matriz
+    printf("Seleccione un método para cargar la matriz:\n");
+    printf("1. Ingresar valores manualmente\n");
+    printf("2. Cargar desde un archivo\n");
+    printf("3. Generar una matriz aleatoria\n");
+    printf("Opción: ");
+    scanf("%d", &option);
+    switch (option) {
+        case 1:
+            // Lógica para ingresar valores manualmente
+            break;
+        case 2:
+            // Lógica para cargar desde un archivo
+            break;
+        case 3:
+            // Lógica para generar una matriz aleatoria
+            break;
+        default:
+            printf("Opción no válida.\n");
+    }
 }
 
 void selector_operaciones(matrix matriz1, matrix matriz2, matrix matriz_solucion) {
